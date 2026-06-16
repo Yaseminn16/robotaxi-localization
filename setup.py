@@ -21,9 +21,10 @@ setup(
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [
+        'console_scripts':[
             'ground_truth_compare = localization_pkg.ground_truth_compare:main',
             'lidar_odometry = localization_pkg.lidar_odometry:main',
+            'gps_dropout = localization_pkg.gps_dropout:main',
         ],
     },
 )
