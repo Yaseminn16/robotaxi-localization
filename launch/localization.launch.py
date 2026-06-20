@@ -32,11 +32,14 @@ def generate_launch_description():
                 'magnetic_declination_radians': 0.0,
                 'yaw_offset': 0.0,
                 'zero_altitude': True,
+                'use_sim_time': True,
+                'wait_for_datum': False,
+                'frequency': 30.0,
+                'delay': 3.0,
             }],
             remappings=[
                 ('imu/data', '/gazebo_ros_imu/out'),
-                ('gps/fix', '/gazebo_ros_gps/out'),
-                ('odometry/filtered', '/localization/pose')
+                ('gps/fix', '/gazebo_ros_gps/out')
             ]
         ),
     ])
