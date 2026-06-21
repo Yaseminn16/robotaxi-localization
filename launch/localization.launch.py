@@ -4,42 +4,28 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
-    
-    config = os.path.join(
-        get_package_share_directory('localization_pkg'),
-        'config',
-        'ekf.yaml'
-    )
+
+    pkg_share = get_package_share_directory('localization_pkg')
+    config = os.path.join(pkg_share, 'config', 'ekf_local.yaml')
 
     return LaunchDescription([
-        
-        # EKF Node - GPS + IMU birleştirir
+
         Node(
             package='robot_localization',
             executable='ekf_node',
             name='ekf_filter_node',
             output='screen',
-            parameters=[config]
+            parameters=[config],
+            remappings=[
+                ('odometry/filtered', '/odometry/filtered')
+            ]
         ),
 
-        # GPS'i odometry formatına çevirir
         Node(
-            package='robot_localization',
-            executable='navsat_transform_node',
-            name='navsat_transform_node',
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='map_to_odom',
             output='screen',
-            parameters=[{
-                'magnetic_declination_radians': 0.0,
-                'yaw_offset': 0.0,
-                'zero_altitude': True,
-                'use_sim_time': True,
-                'wait_for_datum': False,
-                'frequency': 30.0,
-                'delay': 3.0,
-            }],
-            remappings=[
-                ('imu/data', '/gazebo_ros_imu/out'),
-                ('gps/fix', '/gazebo_ros_gps/out')
-            ]
+            arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom'],
         ),
     ])
